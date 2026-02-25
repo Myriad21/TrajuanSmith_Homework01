@@ -11,12 +11,25 @@ class CalculatorApp extends StatefulWidget {
 }
 
 class _CalculatorAppState extends State<CalculatorApp> {
-  String displayText ="1+1";
+  String displayText ="";
+  double? _operand1;
+  String? _operator;
+  bool startNewNumber=false;
+
+  void setOperator(String newOp) {
+    final n = double.tryParse(displayText);
+    if (n == null) return;
+
+    _operand1 = n;
+    _operator = newOp;
+    
+    setState(() {
+      displayText += newOp; // show the expression being built (e.g., "12+")
+    });
+  }
 
 
-  // Helper functions to define the buttons
-  // 
-
+  // Helper functions to define the buttons 
   Widget numberBttn(String t, VoidCallback onTap) => Expanded(
     child: ElevatedButton(
       onPressed: onTap,
@@ -52,6 +65,13 @@ class _CalculatorAppState extends State<CalculatorApp> {
       child: Text(t, style: const TextStyle(fontSize: 50)),
     ),
   );
+
+  // Append text to displayText
+  void append(String s){
+    setState(() {
+      displayText += s;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +114,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 firstRowButtons('±', (){}),
                 
                 const SizedBox(width: 10,),
-                firstRowButtons('%', () => setState(() => displayText+='%')),
+                firstRowButtons('%', () => append('%')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('/', (){})
+                operatorBttn('/', ()=> append('/'))
               ],
             ),
 
@@ -107,16 +127,16 @@ class _CalculatorAppState extends State<CalculatorApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                numberBttn('7', (){}),
+                numberBttn('7', ()=>append('7')),
 
                 const SizedBox(width: 10,),
-                numberBttn('8', (){}),
+                numberBttn('8', () => append('8')),
 
                 const SizedBox(width: 10,),
-                numberBttn('9', (){}),
+                numberBttn('9', () => append('9')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('x', (){})
+                operatorBttn('x', () => append('x'))
               ],
             ),
 
@@ -126,16 +146,16 @@ class _CalculatorAppState extends State<CalculatorApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                numberBttn('4', (){}),
+                numberBttn('4', () => append('4')),
 
                 const SizedBox(width: 10,),
-                numberBttn('5', (){}),
+                numberBttn('5', () => append('5')),
 
                 const SizedBox(width: 10,),
-                numberBttn('6', (){}),
+                numberBttn('6', () => append('6')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('-', (){})
+                operatorBttn('-', () => append('-'))
               ],
             ),
 
@@ -145,16 +165,19 @@ class _CalculatorAppState extends State<CalculatorApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                numberBttn('1', (){}),
+                numberBttn('1', () => append('1')),
 
                 const SizedBox(width: 10,),
-                numberBttn('2', (){}),
+                numberBttn('2', () => append('2')),
 
                 const SizedBox(width: 10,),
-                numberBttn('3', (){}),
+                numberBttn('3', () => append('3')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('+', (){})
+                operatorBttn('+', () {
+                  append('+');
+                  setOperator('+');
+                })
               ],
             ),
 
@@ -167,7 +190,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 Expanded(
                   flex: 2,
                   child: ElevatedButton(
-                    onPressed: (){},
+                    onPressed: () => append('0'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color.fromARGB(255, 69, 67, 67),
                       foregroundColor: Colors.white,
@@ -181,7 +204,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                   ),
                 ),
                 const SizedBox(width: 10,),
-                numberBttn('.', (){}),
+                numberBttn('.', () => append('.')),
 
                 const SizedBox(width: 10,),
                 operatorBttn('=', (){})
