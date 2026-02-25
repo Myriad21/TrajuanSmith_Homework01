@@ -13,6 +13,46 @@ class CalculatorApp extends StatefulWidget {
 class _CalculatorAppState extends State<CalculatorApp> {
   String displayText ="1+1";
 
+
+  // Helper functions to define the buttons
+  // 
+
+  Widget numberBttn(String t, VoidCallback onTap) => Expanded(
+    child: ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 69, 67, 67),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 15),
+      ),
+      child: Text(t, style: const TextStyle(fontSize: 50)),
+    ),
+  );
+
+  Widget operatorBttn(String t, VoidCallback onTap) => Expanded(
+    child: ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: Colors.grey,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 15),
+      ),
+      child: Text(t, style: const TextStyle(fontSize: 50)),
+    ),
+  );
+
+  Widget firstRowButtons(String t, VoidCallback onTap) => Expanded(
+    child: ElevatedButton(
+      onPressed: onTap,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color.fromARGB(255, 91, 89, 89),
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(vertical: 15),
+      ),
+      child: Text(t, style: const TextStyle(fontSize: 50)),
+    ),
+  );
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,69 +88,16 @@ class _CalculatorAppState extends State<CalculatorApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 91, 89, 89),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("C",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                firstRowButtons("C", () => setState(()=> displayText='')),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 91, 89, 89),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("±",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                firstRowButtons('±', (){}),
+                
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 91, 89, 89),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("%",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                firstRowButtons('%', () => setState(() => displayText+='%')),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  Colors.grey,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("/",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                operatorBttn('/', (){})
               ],
             ),
 
@@ -120,69 +107,16 @@ class _CalculatorAppState extends State<CalculatorApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("7",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('7', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("8",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('8', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("9",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('9', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  Colors.grey,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("x",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                operatorBttn('x', (){})
               ],
             ),
 
@@ -192,69 +126,16 @@ class _CalculatorAppState extends State<CalculatorApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("4",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('4', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("5",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('5', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("6",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('6', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  Colors.grey,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("-",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                operatorBttn('-', (){})
               ],
             ),
 
@@ -264,69 +145,16 @@ class _CalculatorAppState extends State<CalculatorApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("1",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('1', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("2",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('2', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("3",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('3', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:  Colors.grey,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("+",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                operatorBttn('+', (){})
               ],
             ),
 
@@ -353,37 +181,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
                   ),
                 ),
                 const SizedBox(width: 10,),
-                Expanded(child:
-                  ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 69, 67, 67),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text(".",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                numberBttn('.', (){}),
+
                 const SizedBox(width: 10,),
-                Expanded(child:
-                  ElevatedButton(
-                    onPressed: (){},
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 15),
-                    ),
-                    child: Text("=",
-                      style: TextStyle(
-                        fontSize: 50.0
-                      ),
-                    )
-                  ),
-                ),
+                operatorBttn('=', (){})
+
               ],
             ),    
           ],
