@@ -96,8 +96,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
       default:
         return;
     }
+
+    // Remove trailing unecessary trailing 0
     setState(() {
-      displayText = result.toString();
+      final s = result.toString();
+      displayText = s.endsWith('.0') ? s.substring(0, s.length - 2) : s;
     });
     _operand1 = null; _operator = null;
   }
@@ -138,6 +141,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
     });
   }
 
+  void backSpace(){
+
+  }
+
   // Helper functions to define the buttons 
   Widget numberBttn(String t, VoidCallback onTap) => Expanded(
     child: ElevatedButton(
@@ -176,8 +183,24 @@ class _CalculatorAppState extends State<CalculatorApp> {
   );
 
   // Append text to displayText
-  void append(String s){
+  // Checks each operand to ensure there no more than one
+  // decimal.
+  void append(String s) {
     setState(() {
+      if (s == '.') {
+        if (_operator == null) {
+          // First operand
+          if (displayText.contains('.')) return;
+        } else {
+          // Second operand
+          final idx = findOperatorIndex();
+          if (idx != -1) {
+            final right = displayText.substring(idx + 1);
+            if (right.contains('.')) return;
+          }
+        }
+      }
+
       displayText += s;
     });
   }
