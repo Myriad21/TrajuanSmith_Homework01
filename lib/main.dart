@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 void main() => runApp(
   MaterialApp(
     theme: ThemeData(
-      scaffoldBackgroundColor: Colors.white,
+      scaffoldBackgroundColor: const Color(0xFF121212),
     ),
     home: CalculatorApp(),
   ),
@@ -232,7 +232,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
       appBar: AppBar(
         title: Text('',
         style: TextStyle(color: Colors.green),),
-        backgroundColor: Colors.white,
+        backgroundColor: const Color(0xFF121212),
       ),
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -244,7 +244,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 height: 150,
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
-                color: Colors.white,
+                color: const Color(0xFF121212),
                 alignment: Alignment.centerRight,
                 child: Text(
                   displayText,
