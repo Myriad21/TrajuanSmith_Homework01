@@ -14,7 +14,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
   String displayText ="";
   double? _operand1;
   String? _operator;
-  bool startNewNumber=false;
+  bool startNewExpression=false;
 
   void setOperator(String newOp) {
     final n = double.tryParse(displayText);
@@ -22,10 +22,72 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
     _operand1 = n;
     _operator = newOp;
-    
+
     setState(() {
       displayText += newOp; // show the expression being built (e.g., "12+")
     });
+  }
+
+  // This function evaluates the expression in displayText
+  // First checks if the 1st operand is null or if the operator is null, if not move on
+  // Next checks if the operator stored is actually in displayText, if yes save the 
+    // index to be used later, If not do not move on.
+  // Next checks for the 2nd operand using the index of the operator, if the operand
+  // is not found do not move on.
+
+  // Then uses the operator in a switch statement to complete the calculations and 
+  // returns the result in displayText.
+  void evaluateExpression() {
+    if (_operand1==null || _operator ==null) {return;}
+
+    final operatorIndex = displayText.indexOf(_operator!);
+    if (operatorIndex == -1) {return;}
+
+    final rightStr = displayText.substring(operatorIndex +1);
+    final _operand2 = double.tryParse(rightStr);
+    if (_operand2==null) {
+      showDialog(
+        context: context,
+        builder: (context) => const AlertDialog(
+          title: Text("Incomplete Expression"),
+          content: Text("Input your 2nd Operand"),
+        ),
+      );
+      return;
+    }
+
+    double result;
+    switch (_operator!) {
+      case '+': result = _operand1! + _operand2; 
+        break;
+      case '-': result = _operand1! - _operand2;
+        break;
+      case '*': result = _operand1! * _operand2;
+        break;
+      case '/': 
+        if (_operand2 == 0) {
+          showDialog(
+            context: context,
+            builder: (context) => const AlertDialog(
+              title: Text("Division by Zero Error"),
+              content: Text("You cannot divide by Zero."),
+            ),
+          );
+          setState(() {
+            displayText = '';
+          });
+          _operand1 = null; _operator =null;
+          return;
+        }
+        result = _operand1!/_operand2;
+        break;
+      default:
+        return;
+    }
+    setState(() {
+      displayText = result.toString();
+    });
+    _operand1 = null; _operator = null;
   }
 
 
@@ -108,7 +170,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                firstRowButtons("C", () => setState(()=> displayText='')),
+                firstRowButtons("C", () {
+                  setState(()=> displayText='');
+                    _operand1 = null;
+                    _operator = null;
+                }),
 
                 const SizedBox(width: 10,),
                 firstRowButtons('±', (){}),
@@ -117,7 +183,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 firstRowButtons('%', () => append('%')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('/', ()=> append('/'))
+                operatorBttn('/', ()=> setOperator('/'))
               ],
             ),
 
@@ -136,7 +202,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 numberBttn('9', () => append('9')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('x', () => append('x'))
+                operatorBttn('x', () => setOperator('*'))
               ],
             ),
 
@@ -155,7 +221,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 numberBttn('6', () => append('6')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('-', () => append('-'))
+                operatorBttn('-', () => setOperator('-'))
               ],
             ),
 
@@ -175,7 +241,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
 
                 const SizedBox(width: 10,),
                 operatorBttn('+', () {
-                  append('+');
                   setOperator('+');
                 })
               ],
@@ -207,8 +272,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 numberBttn('.', () => append('.')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('=', (){})
-
+                operatorBttn('=', () => evaluateExpression())
               ],
             ),    
           ],
