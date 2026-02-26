@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(MaterialApp(
-  home: CalculatorApp(),
-));
+void main() => runApp(
+  MaterialApp(
+    theme: ThemeData(
+      scaffoldBackgroundColor: Colors.white,
+    ),
+    home: CalculatorApp(),
+  ),
+);
 
 class CalculatorApp extends StatefulWidget {
   @override
@@ -24,20 +29,23 @@ class _CalculatorAppState extends State<CalculatorApp> {
     _operator = newOp;
 
     setState(() {
-      displayText += newOp; // show the expression being built (e.g., "12+")
+      displayText += (newOp == '*') ? '×' : newOp; // show the expression being built (e.g., "12+")
     });
   }
 
   // Helper function to find index of the operator
+  // If operator is '-', we skip index 0 so we don't mistake a 
+  // leading negative sign as the operator
   int findOperatorIndex() {
     if (_operator == null) return -1;
 
-    // If operator is '-', skip index 0 so we don't mistake a leading negative sign as the operator
+    final opCharOnScreen = (_operator == '*') ? '×' : _operator!;
+
     if (_operator == '-') {
       return displayText.indexOf('-', 1);
     }
 
-    return displayText.indexOf(_operator!);
+    return displayText.indexOf(opCharOnScreen);
   }
 
   // This function evaluates the expression in displayText
@@ -141,10 +149,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
     });
   }
 
-  void backSpace(){
-
-  }
-
   // Helper functions to define the buttons 
   Widget numberBttn(String t, VoidCallback onTap) => Expanded(
     child: ElevatedButton(
@@ -200,8 +204,25 @@ class _CalculatorAppState extends State<CalculatorApp> {
           }
         }
       }
-
       displayText += s;
+    });
+  }
+
+  // Deletes the last character in display Text
+  // Checks if the last char is the operator, and clears operator state too
+  void backspace() {
+    if (displayText.isEmpty) return;
+
+    setState(() {
+      final lastChar = displayText[displayText.length - 1];
+      final opCharOnScreen = (_operator == '*') ? '×' : _operator;
+
+      if (opCharOnScreen != null && lastChar == opCharOnScreen) {
+        _operator = null;
+        _operand1 = null;
+      }
+
+      displayText = displayText.substring(0, displayText.length - 1);
     });
   }
 
@@ -209,7 +230,9 @@ class _CalculatorAppState extends State<CalculatorApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calc'),
+        title: Text('',
+        style: TextStyle(color: Colors.green),),
+        backgroundColor: Colors.white,
       ),
       body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -221,7 +244,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 height: 150,
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
-                color: Colors.black,
+                color: Colors.white,
                 alignment: Alignment.centerRight,
                 child: Text(
                   displayText,
@@ -247,13 +270,13 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 }),
 
                 const SizedBox(width: 10,),
-                firstRowButtons('del', () {}),
+                firstRowButtons('del', ()=>backspace()),
 
                 const SizedBox(width: 10,),
                 firstRowButtons('±', ()=>toggleSign()),
 
                 const SizedBox(width: 10,),
-                operatorBttn('/', ()=> setOperator('/'))
+                operatorBttn('÷', ()=> setOperator('/'))
               ],
             ),
 
@@ -272,7 +295,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 numberBttn('9', () => append('9')),
 
                 const SizedBox(width: 10,),
-                operatorBttn('x', () => setOperator('*'))
+                operatorBttn('×', () => setOperator('*'))
               ],
             ),
 
