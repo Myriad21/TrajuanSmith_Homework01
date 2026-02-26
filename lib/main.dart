@@ -19,7 +19,6 @@ class _CalculatorAppState extends State<CalculatorApp> {
   String displayText ="";
   double? _operand1;
   String? _operator;
-  bool startNewExpression=false;
 
   void setOperator(String newOp) {
     final n = double.tryParse(displayText);
@@ -126,13 +125,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
         final right = displayText.substring(idx + 1);
 
         // If right side empty, start a negative number (one '-')
-        if (right.isEmpty) {
-          displayText = left + '-';
-          return;
-        }
+        if (right.isEmpty || right == '0') return;
 
         // Toggle exactly one leading '-'
         if (right.startsWith('-')) {
+        if (right.substring(1) == '0') return;
           displayText = left + right.substring(1);
         } else {
           displayText = left + '-' + right;
@@ -141,6 +138,8 @@ class _CalculatorAppState extends State<CalculatorApp> {
       }
 
       // No operator: toggle whole number
+      // If Zero, ignore
+      if (displayText == '0') return;
       if (displayText.startsWith('-')) {
         displayText = displayText.substring(1);
       } else {
@@ -204,6 +203,11 @@ class _CalculatorAppState extends State<CalculatorApp> {
           }
         }
       }
+      if (s=='0'){
+        if(displayText.startsWith('0')) {
+          return;
+        }
+      }
       displayText += s;
     });
   }
@@ -241,7 +245,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
           children: [
             Center(
               child: Container(
-                height: 150,
+                height: 120,
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 color: const Color(0xFF121212),
