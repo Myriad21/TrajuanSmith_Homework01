@@ -28,6 +28,18 @@ class _CalculatorAppState extends State<CalculatorApp> {
     });
   }
 
+  // Helper function to find index of the operator
+  int findOperatorIndex() {
+    if (_operator == null) return -1;
+
+    // If operator is '-', skip index 0 so we don't mistake a leading negative sign as the operator
+    if (_operator == '-') {
+      return displayText.indexOf('-', 1);
+    }
+
+    return displayText.indexOf(_operator!);
+  }
+
   // This function evaluates the expression in displayText
   // First checks if the 1st operand is null or if the operator is null, if not move on
   // Next checks if the operator stored is actually in displayText, if yes save the 
@@ -40,7 +52,7 @@ class _CalculatorAppState extends State<CalculatorApp> {
   void evaluateExpression() {
     if (_operand1==null || _operator ==null) {return;}
 
-    final operatorIndex = displayText.indexOf(_operator!);
+    final operatorIndex = findOperatorIndex();
     if (operatorIndex == -1) {return;}
 
     final rightStr = displayText.substring(operatorIndex +1);
@@ -90,6 +102,41 @@ class _CalculatorAppState extends State<CalculatorApp> {
     _operand1 = null; _operator = null;
   }
 
+  void toggleSign() {
+    setState(() {
+      if (displayText.isEmpty) return;
+
+      // If we have an operator, toggle the RIGHT operand only
+      if (_operator != null) {
+        final idx = findOperatorIndex();
+        if (idx == -1) return;
+
+        final left = displayText.substring(0, idx + 1); // includes operator
+        final right = displayText.substring(idx + 1);
+
+        // If right side empty, start a negative number (one '-')
+        if (right.isEmpty) {
+          displayText = left + '-';
+          return;
+        }
+
+        // Toggle exactly one leading '-'
+        if (right.startsWith('-')) {
+          displayText = left + right.substring(1);
+        } else {
+          displayText = left + '-' + right;
+        }
+        return;
+      }
+
+      // No operator: toggle whole number
+      if (displayText.startsWith('-')) {
+        displayText = displayText.substring(1);
+      } else {
+        displayText = '-' + displayText;
+      }
+    });
+  }
 
   // Helper functions to define the buttons 
   Widget numberBttn(String t, VoidCallback onTap) => Expanded(
@@ -177,10 +224,10 @@ class _CalculatorAppState extends State<CalculatorApp> {
                 }),
 
                 const SizedBox(width: 10,),
-                firstRowButtons('±', (){}),
-                
+                firstRowButtons('del', () {}),
+
                 const SizedBox(width: 10,),
-                firstRowButtons('%', () => append('%')),
+                firstRowButtons('±', ()=>toggleSign()),
 
                 const SizedBox(width: 10,),
                 operatorBttn('/', ()=> setOperator('/'))
